@@ -4,19 +4,19 @@
 
 ::: tip "COURSE SYLLABUS"
 - **Semester:** Fall 2025  
-- **Course Prefix/Number:** COT6905  
-- **Course Title:** Directed Study: Advanced Optimization Algorithms for Large Foundational AI Models  
+- **Course Prefix/Number:** MAP6905  
+- **Course Title:** Directed Study: Advanced Topics in Deep Learning 
 - **Course Credit Hours:** 3.0  
 - **Class Meeting Time:** Weekly, by appointment  
-- **Instructor:** Prof. Brian Jalaian  
-  - Computer Science  
-  - Building 4, Room 434 (Main Campus)  
-  - Email: bjalaian@uwf.edu
+- **Instructor:** Prof. Achraf Cohen
+  - Mathematics and Statistics  
+  - Building 4, Room 337B (Main Campus)  
+  - Email: acohen@uwf.edu
 :::
 
 ## Course Description
 
-This directed study investigates the advanced mathematical and optimization foundations required for training and deploying large-scale foundational AI models. Topics include:
+This directed study investigates the advanced topics in Deep Learning for Artificial Intelligence. Topics include:
 
 - Matrix theory for understanding and improving optimization algorithms (vector spaces, ranks, block operations, decompositions)
 - Tensor factorization techniques relevant to modern architectures
