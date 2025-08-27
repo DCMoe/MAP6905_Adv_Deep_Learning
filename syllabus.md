@@ -11,8 +11,7 @@
 - **Instructor:** Prof. Achraf Cohen
   - Mathematics and Statistics  
   - Building 4, Room 337B (Main Campus)  
-  - Email: acohen@uwf.edu
-:::
+  - Email: acohen@uwf.edu :::
 
 ## Course Description
 
