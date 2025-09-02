@@ -67,13 +67,19 @@ Selecting appropriate patterns enhances accuracy, relevance, or creativity, form
 
 ## Suggested Reading & Viewing
 
-:bibliography:
-  - ref-1: Wang, J., et al. (2024). _A Survey of Prompt Engineering Methods in Large Language Models: Techniques, Applications, and Challenges_. [arXiv link](https://arxiv.org/abs/2407.12994)
-  - ref-2: Wang, L., et al. (2025). _Unleashing the potential of prompt engineering for large language models: A comprehensive review_. [ScienceDirect link](https://www.sciencedirect.com/science/article/pii/S2666389925001084)
-  - ref-3: Khattab, O., et al. (2025). _Prompt Engineering for Large Language Models: A Systematic Review and Future Directions_. [ResearchGate link](https://www.researchgate.net/publication/392015598_Prompt_Engineering_for_Large_Language_Models_A_Systematic_Review_and_Future_Directions)
-  - ref-4: Google's 9 Hour AI Prompt Engineering Course In 20 Minutes (YouTube, Tina Huang). [YouTube link](https://www.youtube.com/watch?v=p09yRj47kNM)
-  - ref-5: The ULTIMATE 2025 Guide to Prompt Engineering (YouTube, Dave Ying Tutorials). [YouTube link](https://www.youtube.com/watch?v=bIxbpIwYTXI)
-  - ref-6: Microsoft Learn: Understanding Prompt Engineering Fundamentals. [Microsoft Learn link](https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners)
+References:
+
+(ref-1)= Wang, J., et al. (2024). _A Survey of Prompt Engineering Methods in Large Language Models: Techniques, Applications, and Challenges_. [arXiv link](https://arxiv.org/abs/2407.12994)
+
+(ref-2)= Wang, L., et al. (2025). _Unleashing the potential of prompt engineering for large language models: A comprehensive review_. [ScienceDirect link](https://www.sciencedirect.com/science/article/pii/S2666389925001084)
+
+(ref-3)= Khattab, O., et al. (2025). _Prompt Engineering for Large Language Models: A Systematic Review and Future Directions_. [ResearchGate link](https://www.researchgate.net/publication/392015598_Prompt_Engineering_for_Large_Language_Models_A_Systematic_Review_and_Future_Directions)
+
+(ref-4)= Google's 9 Hour AI Prompt Engineering Course In 20 Minutes (YouTube, Tina Huang). [YouTube link](https://www.youtube.com/watch?v=p09yRj47kNM)
+
+(ref-5)= The ULTIMATE 2025 Guide to Prompt Engineering (YouTube, Dave Ying Tutorials). [YouTube link](https://www.youtube.com/watch?v=bIxbpIwYTXI)
+
+(ref-6)= Microsoft Learn: Understanding Prompt Engineering Fundamentals. [Microsoft Learn link](https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners)
 
 ---
 
