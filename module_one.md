@@ -25,7 +25,7 @@ Prompt engineering involves designing and optimizing input queries or instructio
 
 ## Anatomy of a Prompt
 
-Prompts can be dissected into key components[1](#suggested-reading--viewing):
+Prompts can be dissected into key components[1]:
 - **Task Definition:** Explicitly stating the request (e.g., summarize, classify, generate).
 - **Context:** Supplying pertinent background or details to guide the response.
 - **Instructions:** Detailed directives on style, length, or approach (e.g., “use bullet points”).
@@ -37,7 +37,7 @@ These elements, when combined effectively, reduce variability, prevent misunders
 
 ## The RACE Framework
 
-The RACE framework has become widely adopted in recent prompt engineering practices [2](#suggested-reading--viewing):
+The RACE framework has become widely adopted in recent prompt engineering practices[2]:
 - **Role:** Assign a persona to the model (e.g., “Act as a historian”).
 - **Action:** Define the specific task or goal.
 - **Context:** Provide necessary background information.
@@ -55,7 +55,7 @@ LLMs tokenize inputs—breaking text into subword units—then use deep neural a
 
 ## Common Prompt Patterns
 
-Established patterns in prompt engineering include[1](#suggested-reading--viewing):
+Established patterns in prompt engineering include[1]:
 - **Question-Answering:** Focused queries with format specs.
 - **Instructional:** Command-based (e.g., “Analyze this data”).
 - **Creative Writing:** Open prompts, e.g., “Invent a story about AI ethics.”
