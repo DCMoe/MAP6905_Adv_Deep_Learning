@@ -3,11 +3,7 @@ version: 1
 project:
   id: 27b53f82-9105-48f5-a83c-11c5d2229043
   title: Advanced Topics in Deep Learning
-  # description:
-  # keywords: []
-  # authors: []
   github: https://github.com/DCMoe/MAP6905_Adv_Deep_Learning
-  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
 toc:
   - file: syllabus.md
   - title: LLMs
@@ -20,13 +16,8 @@ toc:
     children:
       - file: 01_foundation.md
       - file: 02_instruct_tune.md
-    # - title: VLMs
-      # children:
-      #   - file: 
-
-    
+# - title: VLMs
+#   children:
+#     - file: ...
 site:
   template: book-theme
-  # options:
-  #   favicon: favicon.ico
-  #   logo: site_logo.png
