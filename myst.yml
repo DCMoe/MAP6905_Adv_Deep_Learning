@@ -8,18 +8,18 @@ project:
   # authors: []
   github: https://github.com/DCMoe/MAP6905_Adv_Deep_Learning
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
-  toc:
-    - file: syllabus.md
-    - title: LLMs
-      children:
-        - file: 01_intro_llms.md
-        - file: 02_transformer_math.md
-        - file: 03_training_llms.md
-        - file: 04_prompting_and_inference.md
-    - title: Prompt Engineering
-      children:
-        - file: 01_foundation.md
-        - file: 02_instruct_tune.md
+toc:
+  - file: syllabus.md
+  - title: LLMs
+    children:
+      - file: 01_intro_llms.md
+      - file: 02_transformer_math.md
+      - file: 03_training_llms.md
+      - file: 04_prompting_and_inference.md
+  - title: Prompt Engineering
+    children:
+      - file: 01_foundation.md
+      - file: 02_instruct_tune.md
     # - title: VLMs
       # children:
       #   - file: 
