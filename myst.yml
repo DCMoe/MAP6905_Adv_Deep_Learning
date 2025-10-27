@@ -1,9 +1,13 @@
-# See docs at: https://mystmd.org/guide/frontmatter
+# myst.yml
 version: 1
 project:
   id: 27b53f82-9105-48f5-a83c-11c5d2229043
   title: Advanced Topics in Deep Learning
   github: https://github.com/DCMoe/MAP6905_Adv_Deep_Learning
+  # Explicitly ignore the files you don’t want in the navigation
+  exclude:
+    - hello_world.md
+    - README.md
 toc:
   - file: syllabus.md
   - title: LLMs
@@ -14,7 +18,7 @@ toc:
       - file: LLMs/04_prompting_and_inference.md
   - title: Prompt Engineering
     children:
-      - file: Prompt_Engineering/01_foundation.md
+      - file: Prompt_Engineering/01_foundations.md
       - file: Prompt_Engineering/02_instruct_tune.md
 site:
   template: book-theme
