@@ -246,7 +246,7 @@ This produces a $T \times T$ matrix $A$ showing how much each token attends to t
 #### Step 3: Weighted sum of values
 
 $$
-Z = A,V.
+Z = AV.
 $$
 
 Here, each output vector $z_t$ is a weighted combination of all token value vectors $v_j$.
@@ -584,10 +584,5 @@ The deeper the stack, the richer the contextual relationships become — from sy
 Now that we’ve assembled the pieces, you’re ready to **run the interactive version** in Colab.
 In the next notebook, you’ll visualize attention maps, inspect intermediate tensors, and experiment with modifying embeddings.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_intro.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_intro.ipynb)
 
----
-
-## References
-
-[1] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). Attention is all you need. In Advances in Neural Information Processing Systems (NeurIPS 2017). arXiv:1706.03762 [cs.CL]. https://doi.org/10.48550/arXiv.1706.03762
