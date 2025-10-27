@@ -364,7 +364,6 @@ Without it, early training can produce exploding attention weights.
 It rescales activations to unit variance before applying learned scale $(\gamma)$ and bias $(\beta)$:
 
 $$
-\[
 \begin{aligned}
 \frac{\partial \mathcal{L}}{\partial x_i}
 &\propto
@@ -376,7 +375,6 @@ $$
   \sum_j \frac{\partial \mathcal{L}}{\partial \hat{x}_j} \hat{x}_j
 \Bigg].
 \end{aligned}
-\]
 $$
 
 This expression shows that LayerNorm not only normalizes activations but also **balances gradient contributions** across features.
