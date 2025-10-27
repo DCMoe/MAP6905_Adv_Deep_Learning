@@ -540,7 +540,7 @@ class TinyTransformer(nn.Module):
 
 We’ll train the model for a few epochs and visualize the loss curve.
 
-```{code-cell}
+```{code-cell} python
 from torch.optim import AdamW
 import matplotlib.pyplot as plt
 
