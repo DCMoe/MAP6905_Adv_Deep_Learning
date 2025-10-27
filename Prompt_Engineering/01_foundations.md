@@ -1,4 +1,4 @@
-# Module 1: Foundations of Prompt Engineering
+# Foundations of Prompt Engineering
 
 ## Module Overview
 

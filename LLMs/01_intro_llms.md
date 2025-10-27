@@ -24,7 +24,7 @@ Let $w_{1:T} = (w_1, w_2, \ldots, w_T)$ represent a sequence of tokens drawn fro
 Using the chain rule of probability, a language model defines:
 
 $$
-P(w_{1:T}) \;=\; \prod_{t=1}^{T} P\!\left(w_t \mid w_{<t}\right),
+P(w_{1:T}) = \prod_{t=1}^{T} P\!\left(w_t \mid w_{<t}\right),
 $$
 
 where $w_{<t}=(w_1,\ldots,w_{t-1})$.  
@@ -52,7 +52,7 @@ LLMs process **tokens**, not raw text.
 Each token $w_t$ is first mapped to an integer index in ${1,\ldots,V}$, then to a **vector embedding** through a learned matrix $E \in \mathbb{R}^{V\times d}$:
 
 $$
-x_t ;=; E[w_t] \in \mathbb{R}^{d}.
+x_t = E[w_t] \in \mathbb{R}^{d}.
 $$
 
 The sequence of embeddings $X = (x_1, x_2, \ldots, x_T)$ is fed into a **Transformer**, which outputs contextualized representations $h_t$ for each token.
@@ -60,14 +60,14 @@ The sequence of embeddings $X = (x_1, x_2, \ldots, x_T)$ is fed into a **Transfo
 A **decoder head** then transforms each hidden state $h_t$ into a set of **logits** over the vocabulary:
 
 $$
-z_t ;=; W_o, h_t ;+; b_o ;\in; \mathbb{R}^{V},
+z_t = W_o, h_t + b_o \in \mathbb{R}^{V},
 $$
 
 and applies the **softmax** function to convert these logits into probabilities:
 
 $$
 P(w_t = v_i \mid w_{<t})
-;=;
+=
 \frac{\exp(z_{t,i})}
 {\displaystyle \sum_{j=1}^{V} \exp(z_{t,j})},
 $$
@@ -79,9 +79,9 @@ where:
 
 ```{admonition} Key Terms
 - **Token:** a discrete unit of text (word, subword, or character).  
-- **Vocabulary (\(V\))**: set of all tokens known to the model.  
-- **Embedding (\(x_t\))**: dense vector representing token \(w_t\).  
-- **Logits (\(z_t\))**: unnormalized scores for all tokens.  
+- **Vocabulary ($V$)**: set of all tokens known to the model.  
+- **Embedding ($x_t$)**: dense vector representing token $w_t$.  
+- **Logits ($z_t$)**: unnormalized scores for all tokens.  
 - **Softmax:** normalizes logits into a probability distribution.
 ```
 
@@ -118,7 +118,7 @@ This allows the model to handle any text (including rare or unseen words) effici
 
 Below we’ll use the GPT-2 tokenizer from Hugging Face to demonstrate how text becomes tokens and IDs.
 
-```{code-cell}
+```{code-cell} python
 from transformers import AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained("gpt2")
@@ -161,7 +161,7 @@ $$
 
 Each row represents a token embedding in context order.
 
-```{code-cell}
+```{code-cell} python
 import torch
 import torch.nn as nn
 
@@ -185,9 +185,9 @@ torch.Size([5, 8])
 | Concept                  | Description                                      |
 | ------------------------ | ------------------------------------------------ |
 | **Tokenizer**            | Converts raw text into integer token IDs.        |
-| **Vocabulary**           | The set of all known tokens (size =(V)).         |
-| **Embedding Matrix (E)** | Maps token IDs to dense vectors.                 |
-| **Input Matrix (X)**     | Sequence of embeddings fed into the Transformer. |
+| **Vocabulary**           | The set of all known tokens (size =$V$).         |
+| **Embedding Matrix $E$** | Maps token IDs to dense vectors.                 |
+| **Input Matrix $X$**     | Sequence of embeddings fed into the Transformer. |
 
 ---
 
@@ -208,16 +208,7 @@ A Transformer consists of multiple stacked **blocks**, each containing:
 4. Residual Connections
 
 
-### TODO: ADD TRANSFORMER BLOCK IMAGE
-```{figure} ../images/transformer_block.png
----
-height: 350px
-name: transformer-block
----
-Simplified transformer block: attention, feedforward, normalization, and residual paths.
-```
-
-Formally, for the input matrix (X_l \in \mathbb{R}^{T \times d}) at layer (l):
+Formally, for the input matrix $X_l \in \mathbb{R}^{T \times d}$ at layer $l$:
 
 $$
 \begin{aligned}
@@ -247,7 +238,7 @@ where $W_Q, W_K, W_V \in \mathbb{R}^{d \times d_k}$ are learned projection matri
 #### Step 2: Compute attention weights
 
 $$
-A = \mathrm{softmax}!\left(\frac{QK^\top}{\sqrt{d_k}}\right).
+A = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right).
 $$
 
 This produces a $T \times T$ matrix $A$ showing how much each token attends to the others.
@@ -262,7 +253,7 @@ Here, each output vector $z_t$ is a weighted combination of all token value vect
 
 ---
 
-```{code-cell}
+```{code-cell} python
 # Manual single-head attention on small tensors
 T, d = 4, 8
 X = torch.rand(T, d)
@@ -308,7 +299,7 @@ $$
 
 where $W_O \in \mathbb{R}^{Hd_k \times d}$ projects the combined output back to the model dimension.
 
-```{code-cell}
+```{code-cell} python
 import torch.nn as nn
 
 mha = nn.MultiheadAttention(embed_dim=8, num_heads=2, batch_first=True)
@@ -331,7 +322,7 @@ $$
 \text{FFN}(x) = \text{ReLU}(x W_1 + b_1) W_2 + b_2.
 $$
 
-```{code-cell}
+```{code-cell} python
 import torch.nn as nn
 
 ffn = nn.Sequential(
@@ -360,7 +351,7 @@ Z &= \text{LayerNorm}(Y + \text{FFN}(Y)).
 \end{aligned}
 $$
 
-```{code-cell}
+```{code-cell} python
 norm = nn.LayerNorm(8)
 residual_out = norm(X + out)
 residual_out.shape
@@ -412,15 +403,15 @@ Vaswani et al. (2017) proposed using fixed sinusoidal functions of different fre
 
 $$
 \begin{aligned}
-\text{PE}*{(pos,2i)} &= \sin!\left(\frac{pos}{10000^{2i/d}}\right), \
-\text{PE}*{(pos,2i+1)} &= \cos!\left(\frac{pos}{10000^{2i/d}}\right),
+\text{PE}*{(pos,2i)} &= \sin\left(\frac{pos}{10000^{2i/d}}\right), \
+\text{PE}*{(pos,2i+1)} &= \cos\left(\frac{pos}{10000^{2i/d}}\right),
 \end{aligned}
 $$
 
 where:
 
-* $pos$ = position index $0 to T − 1$
-* $i$ = dimension index $0 to d/2 − 1$
+* $pos$ = position index $0$ to $T − 1$
+* $i$ = dimension index $0$ to $d/2 − 1$
 * $d$ = embedding dimension
 
 The even indices use sine and the odd indices use cosine so that each dimension captures a unique frequency pattern.
@@ -439,7 +430,7 @@ This enriched representation $x_t'$ combines both **content** (from embeddings) 
 
 ---
 
-```{code-cell}
+```{code-cell} python
 import math
 import torch
 
@@ -484,8 +475,7 @@ Each row represents one token’s position encoding across the eight dimensions.
 
 ## 5 Putting It All Together
 
-Now that we’ve explored each component — tokenization, embeddings, attention, feedforward layers, and positional encoding —  
-we can combine them to understand the **full forward pass** of a Transformer-based LLM.
+Now that we’ve explored each component — tokenization, embeddings, attention, feedforward layers, and positional encoding — we can combine them to understand the **full forward pass** of a Transformer-based LLM.
 
 ---
 
@@ -530,7 +520,7 @@ $$
 
 ---
 
-```{code-cell}
+```{code-cell} python
 import torch, torch.nn as nn, torch.nn.functional as F
 
 class MiniTransformerLayer(nn.Module):
@@ -594,15 +584,9 @@ The deeper the stack, the richer the contextual relationships become — from sy
 Now that we’ve assembled the pieces, you’re ready to **run the interactive version** in Colab.
 In the next notebook, you’ll visualize attention maps, inspect intermediate tensors, and experiment with modifying embeddings.
 
-### UPDATE COLAB LINK
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/notebooks/llm_intro.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_intro.ipynb)
 
 ---
-
-```{admonition} Next Module
-Continue to: [Training Objectives and Loss Functions](LLMs/02_transformer_math.md)
-```
 
 ## References
 
