@@ -25,8 +25,8 @@ where $W_Q, W_K, W_V \in \mathbb{R}^{d \times d_k}$.
 ### Step 2: Scaled dot-product attention
 
 $$
-A = \mathrm{softmax}!\left(\frac{QK^\top}{\sqrt{d_k}}\right), \qquad
-Z = A,V
+A = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right), \qquad
+Z = AV
 $$
 
 The scaling factor $\sqrt{d_k}$ keeps the dot products numerically stable by preventing the softmax from becoming too sharp as $d_k$ grows.
@@ -34,8 +34,8 @@ The scaling factor $\sqrt{d_k}$ keeps the dot products numerically stable by pre
 ---
 
 ```{admonition} Derivation Insight
-The unscaled dot-product \(QK^\top\) can have variance proportional to \(d_k\).  
-Dividing by \(\sqrt{d_k}\) ensures that \(\mathrm{Var}(QK^\top)\) remains roughly constant across model sizes.
+The unscaled dot-product $QK^\top$ can have variance proportional to $d_k$.  
+Dividing by $\sqrt{d_k}$ ensures that $\mathrm{Var}(QK^\top)$ remains roughly constant across model sizes.
 ```
 
 ---
@@ -99,17 +99,17 @@ We do this by minimizing a loss function that compares the model’s predicted d
 
 ### 2.1 Next-Token Prediction Objective
 
-For a vocabulary of size \(V\), let  
-- \(z_t \in \mathbb{R}^V\) be the logits (unnormalized scores) for position \(t\), and  
-- \(y_t \in \{1,\dots,V\}\) be the **true** token index at that position.
+For a vocabulary of size $V$, let  
+- $z_t \in \mathbb{R}^V$ be the logits (unnormalized scores) for position $t$, and  
+- $y_t \in \{1,\dots,V\}$ be the **true** token index at that position.
 
-After the softmax, the model’s predicted probability for class \(i\) is:
+After the softmax, the model’s predicted probability for class $i$ is:
 
 $$
 p_{t,i} = \frac{e^{z_{t,i}}}{\displaystyle \sum_{j=1}^{V} e^{z_{t,j}}}.
 $$
 
-The training goal is to **maximize the likelihood** of the correct token \(y_t\):
+The training goal is to **maximize the likelihood** of the correct token $y_t$:
 
 $$
 \max_\theta \log p_{t, y_t}.
@@ -128,15 +128,14 @@ $$
 
 ### 2.2 Derivation of the Cross-Entropy Form
 
-If we represent the true target as a one-hot vector \(y_t \in \{0,1\}^V\) where \(y_{t,i}=1\) for the correct token,  
-the average loss over all vocabulary entries is
+If we represent the true target as a one-hot vector $y_t \in \{0,1\}^V$ where $y_{t,i}=1$ for the correct token, the average loss over all vocabulary entries is
 
 $$
 \mathcal{L}_{\text{CE}}(t)
 = - \sum_{i=1}^{V} y_{t,i} \log p_{t,i}.
 $$
 
-For a batch of sequences with \(T\) tokens each, the total loss is:
+For a batch of sequences with $T$ tokens each, the total loss is:
 
 $$
 \mathcal{L}_{\text{CE}}
@@ -144,15 +143,12 @@ $$
 \sum_{i=1}^{V} y_{t,i} \log p_{t,i}.
 $$
 
-This is the **cross-entropy loss** between the true distribution \(y_t\) and the predicted distribution \(p_t\).
+This is the **cross-entropy loss** between the true distribution $y_t$ and the predicted distribution $p_t$.
 
 ---
 
 ```{admonition} Mathematical Identity
-Because \(y_t\) is one-hot,  
-\(\displaystyle
-\mathcal{L}_{\text{CE}} = -\log p_{t,y_t}
-\).
+Because $y_t$ is one-hot, $\displaystyle\mathcal{L}_{\text{CE}} = -\log p_{t,y_t}$.
 Thus, minimizing cross-entropy is identical to maximizing the log-likelihood of the correct token.
 ```
 
@@ -160,7 +156,7 @@ Thus, minimizing cross-entropy is identical to maximizing the log-likelihood of 
 
 ### 2.3 Gradient of the Softmax–Cross-Entropy
 
-Let’s derive the gradient with respect to each logit \(z_{t,k}\).
+Let’s derive the gradient with respect to each logit $z_{t,k}$.
 
 We start from the probability definition:
 
@@ -168,7 +164,7 @@ $$
 p_{t,k} = \frac{e^{z_{t,k}}}{\sum_j e^{z_{t,j}}}.
 $$
 
-The derivative of the loss w.r.t. \(z_{t,k}\) is:
+The derivative of the loss w.r.t. $z_{t,k}$ is:
 
 $$
 \frac{\partial \mathcal{L}*{\text{CE}}}{\partial z*{t,k}}
@@ -176,9 +172,9 @@ $$
 $$
 
 ```{admonition} Derivation Outline
-1️⃣ Differentiate \(\log p_{t,y_t}\) using the chain rule.  
-2️⃣ For the correct class, you get \(p_{t,y_t}-1\); for others, \(p_{t,k}\).  
-3️⃣ The result elegantly simplifies to \(p_t - y_t\).
+1️⃣ Differentiate $\log p_{t,y_t}$ using the chain rule.  
+2️⃣ For the correct class, you get $p_{t,y_t}-1$; for others, $p_{t,k}$.  
+3️⃣ The result elegantly simplifies to $p_t - y_t$.
 ```
 
 This simplicity makes back-propagation efficient — the gradient of cross-entropy with softmax collapses to a clean subtraction between predicted probabilities and true labels.
@@ -187,7 +183,7 @@ This simplicity makes back-propagation efficient — the gradient of cross-entro
 
 ### 2.4 Implementing Cross-Entropy in PyTorch
 
-```{code-cell}
+```{code-cell} python
 import torch
 import torch.nn.functional as F
 
@@ -223,7 +219,7 @@ $$
 Intuitively, perplexity measures how “surprised” the model is by the data.
 Lower perplexity → better predictive power.
 
-```{code-cell}
+```{code-cell} python
 # Compute perplexity from loss
 perplexity = torch.exp(loss)
 print("Perplexity:", float(perplexity))
@@ -239,7 +235,7 @@ Perplexity: 1.8337328433990479
 
 We can visualize how cross-entropy behaves for a two-class softmax as logits vary.
 
-```{code-cell}
+```{code-cell} python
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -258,7 +254,12 @@ plt.legend()
 plt.show()
 ```
 
-###TODO Add IMAGE
+```{figure} ../images/CE_loss.png
+---
+height: 280px
+name: training-loss-curve
+---
+```
 
 
 ## 3 Gradient Derivation & Optimization Intuition
@@ -282,15 +283,15 @@ $$
 
 Let’s interpret this result.
 
-- If the model predicts correctly (high \(p_{t,y_t}\)), the gradient magnitude is **small**.
-- If it’s wrong (low \(p_{t,y_t}\)), the gradient is **large**, pushing the logit upward.
+- If the model predicts correctly (high $p_{t,y_t}$), the gradient magnitude is **small**.
+- If it’s wrong (low $p_{t,y_t}$), the gradient is **large**, pushing the logit upward.
 
 This dynamic creates a **self-correcting mechanism**:
 > The model automatically adjusts its logits more strongly for incorrect predictions.
 
 ---
 
-```{code-cell}
+```{code-cell} python
 # Demonstrate gradient magnitudes for different logits
 import torch
 import torch.nn.functional as F
@@ -313,7 +314,7 @@ Gradients (p - y): [[-0.010986924171447754, 0.010986942797899246]]
 Loss: 0.011047743260860443
 ```
 
-The gradient for the correct class \((-0.010987)\) is small — indicating the model is confident.
+The gradient for the correct class $(-0.010987)$ is small — indicating the model is confident.
 For an incorrect guess, this difference would be much larger, accelerating correction.
 
 ---
@@ -323,10 +324,10 @@ For an incorrect guess, this difference would be much larger, accelerating corre
 Let’s analyze how gradients propagate through the attention operation:
 
 $$
-Z = A,V, \qquad A = \mathrm{softmax}!\left(\frac{QK^\top}{\sqrt{d_k}}\right).
+Z = AV, \qquad A = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right).
 $$
 
-To update parameters in \(W_Q\), \(W_K\), and \(W_V\), the model computes partial derivatives such as:
+To update parameters in $W_Q$, $W_K$, and $W_V$, the model computes partial derivatives such as:
 
 $$
 \frac{\partial \mathcal{L}}{\partial W_Q}
@@ -346,12 +347,12 @@ $$
 \text{where } S = \frac{QK^\top}{\sqrt{d_k}}.
 $$
 
-This structure ensures that increasing attention to one token decreases it for others, maintaining normalization within each row of \(A\).
+This structure ensures that increasing attention to one token decreases it for others, maintaining normalization within each row of $A$.
 
 ---
 
 ```{admonition} Gradient Stability
-The division by \(\sqrt{d_k}\) stabilizes gradients by keeping the dot-product scale near zero mean and unit variance.
+The division by $\sqrt{d_k}$ stabilizes gradients by keeping the dot-product scale near zero mean and unit variance.
 Without it, early training can produce exploding attention weights.
 ```
 
@@ -360,18 +361,22 @@ Without it, early training can produce exploding attention weights.
 ### 3.3 Normalization and Residuals
 
 **LayerNorm** ensures gradients remain well-scaled across layers.
-It rescales activations to unit variance before applying learned scale \((\gamma)\) and bias \((\beta)\):
+It rescales activations to unit variance before applying learned scale $(\gamma)$ and bias $(\beta)$:
 
 $$
+\[
+\begin{aligned}
 \frac{\partial \mathcal{L}}{\partial x_i}
-\propto
+&\propto
 \frac{1}{\sqrt{\sigma^2 + \epsilon}}
-\left(
+\Bigg[
 \frac{\partial \mathcal{L}}{\partial \hat{x}_i}
-
-* \frac{1}{d}\sum_j \frac{\partial \mathcal{L}}{\partial \hat{x}_j}
-* \hat{x}_i \sum_j \frac{\partial \mathcal{L}}{\partial \hat{x}_j} \hat{x}_j
-  \right).
+- \frac{1}{d} \sum_j \frac{\partial \mathcal{L}}{\partial \hat{x}_j}
+- \hat{x}_i
+  \sum_j \frac{\partial \mathcal{L}}{\partial \hat{x}_j} \hat{x}_j
+\Bigg].
+\end{aligned}
+\]
 $$
 
 This expression shows that LayerNorm not only normalizes activations but also **balances gradient contributions** across features.
@@ -385,7 +390,7 @@ Residual connections complement this by allowing gradients to **bypass** nonline
 In deeper networks, gradient norms can vary drastically.
 Below we simulate a random Transformer stack to observe this effect.
 
-```{code-cell}
+```{code-cell} python
 import torch.nn as nn
 
 torch.manual_seed(0)
@@ -428,7 +433,7 @@ $$
 \theta_{t+1} = \theta_t - \eta \frac{\partial \mathcal{L}}{\partial \theta_t},
 $$
 
-where \(\eta\) is the learning rate.
+where $\eta$ is the learning rate.
 
 However, large models often use adaptive optimizers (like AdamW) that maintain **moment estimates** of gradients:
 
@@ -449,17 +454,14 @@ allowing stable optimization even for very large Transformers.
 
 ### 3.6 Visualizing Loss Curve During Training (Preview)
 
-In the next section, we’ll implement a **toy training loop** on a small Hugging Face dataset to visualize both:
-
-* the **loss curve** across epochs, and
-* the **attention heatmap** during learning.
+In the next section, we’ll implement a **toy training loop** on a small Hugging Face dataset to visualize the **loss curve** across epochs:
 
 ```{figure} ../images/loss_curve_example.png
 ---
 height: 280px
 name: training-loss-curve
 ---
-Illustration: loss decreasing smoothly over training steps.
+Loss decreasing smoothly over training steps.
 ```
 
 
@@ -485,7 +487,7 @@ Our goal is *not* high performance — just to visualize how an LLM learns token
 
 ### 4.2 Load and Tokenize the Dataset
 
-```{code-cell}
+```{code-cell} python
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
@@ -512,7 +514,7 @@ Each row is a 64-token sequence that the model will try to predict one step ahea
 
 ### 4.3 Define a Tiny Transformer Model
 
-```{code-cell}
+```{code-cell} python
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -577,7 +579,7 @@ Epoch 4: Loss = 0.1982
 Epoch 5: Loss = 0.1702
 ```
 
-```{figure} ../images/CE_loss.png
+```{figure} ../images/mod2_4-4_loss.png
 ---
 height: 280px
 name: CE-loss-curve
@@ -590,7 +592,7 @@ As training progresses, the loss decreases — meaning the model is improving it
 
 ### 4.5 Evaluate Perplexity on Validation Samples
 
-```{code-cell}
+```{code-cell} python
 with torch.no_grad():
     logits, _ = model(input_ids[:32])
     loss = F.cross_entropy(logits[:, :-1, :].reshape(-1, vocab_size),
@@ -632,7 +634,7 @@ The Colab notebook (`llm_training.ipynb`) contains:
 | **2. Cross-Entropy Loss** | Step-by-step derivation with code and gradient verification |
 | **3. Gradient Flow & Normalization** | Visualize gradient magnitudes across Transformer layers |
 | **4. Mini Transformer Training** | Train a two-layer Transformer on a subset of WikiText-2 |
-| **5. Visualizations** | Real-time loss curve rendering |
+| **5. Visualizations** | Real-time loss output |
 | **6. Evaluation** | Compute perplexity and analyze overfitting behavior |
 
 ---
@@ -641,7 +643,7 @@ The Colab notebook (`llm_training.ipynb`) contains:
 
 Click below to open the notebook directly in Google Colab and run the full training pipeline:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/notebooks/llm_training.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_training.ipynb)
 
 
 ---
@@ -664,8 +666,3 @@ Click below to open the notebook directly in Google Colab and run the full train
 * The **cross-entropy objective** trains the model to minimize uncertainty (perplexity).
 * Even a **tiny Transformer** demonstrates the same dynamics seen in billion-parameter models.
 
----
-
-```{admonition} Next Module
-Continue to: [LLM Training Objectives](LLMs/03_training_llms.md)
-```
