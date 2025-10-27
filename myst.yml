@@ -8,16 +8,13 @@ toc:
   - file: syllabus.md
   - title: LLMs
     children:
-      - file: 01_intro_llms.md
-      - file: 02_transformer_math.md
-      - file: 03_training_llms.md
-      - file: 04_prompting_and_inference.md
+      - file: LLMs/01_intro_llms.md
+      - file: LLMs/02_transformer_math.md
+      - file: LLMs/03_training_llms.md
+      - file: LLMs/04_prompting_and_inference.md
   - title: Prompt Engineering
     children:
-      - file: 01_foundation.md
-      - file: 02_instruct_tune.md
-# - title: VLMs
-#   children:
-#     - file: ...
+      - file: Prompt_Engineering/01_foundation.md
+      - file: Prompt_Engineering/02_instruct_tune.md
 site:
   template: book-theme
