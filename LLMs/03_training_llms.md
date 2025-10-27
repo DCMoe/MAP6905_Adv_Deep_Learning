@@ -26,8 +26,9 @@ By the end of this module, you will be able to:
 At time $t$, predict the next token $x_t$ given $x_{<t}$:
 
 $$
-\mathcal{L}*{\text{CLM}} =
--\sum*{t=1}^{T}\log P_\theta(x_t \mid x_{<t})
+\mathcal{L}_{\text{CLM}}
+=
+- \sum_{t=1}^{T} \log P_\theta(x_t \mid x_{<t}).
 $$
 
 ### 1.2 Masked LM
@@ -35,13 +36,14 @@ $$
 Mask a subset of tokens $M \subset {1,\dots,T}$, and train the model to predict them:
 
 $$
-\mathcal{L}*{\text{MLM}} =
--!!\sum*{t\in M}!!\log P_\theta(x_t \mid x_{\setminus M})
+\mathcal{L}_{\text{MLM}}
+=
+- \sum_{t \in M} \log P_\theta(x_t \mid x_{\setminus M}).
 $$
 
 ---
 
-### 1.3 Example Illustration
+### 1.3 Example Code
 
 ```{code-cell} python
 import torch
@@ -107,10 +109,3 @@ name: training-loss-curve
 | **Masked LM Loss** | $\mathcal{L}=-\sum_{t\in M}\log P(x_t\mid x_{\setminus M})$ | Fill-in-the-blank training              |
 | **Softmax Prob.**  | $p_i = e^{z_i}/\sum_j e^{z_j}$                              | Converts logits to probabilities        |
 | **Cross-Entropy**  | $\mathcal{L}=-\sum_i y_i\log p_i$                           | Penalizes low probability on true label |
-
-
----
-
-```{admonition} Next Module
-Continue to: [Inference, Prompting, and Fine-tuning](LLMs/04_prompting_and_inference.md)
-```
