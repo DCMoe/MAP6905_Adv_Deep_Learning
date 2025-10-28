@@ -20,7 +20,7 @@ During **training**, we minimize loss over known tokens.
 During **inference**, we *sample* or *decode* the next token given context:
 
 $$
-\hat{x}*{t+1} = \arg\max*{x} P_\theta(x \mid x_{\le t})
+\hat{x}_{t+1} = \arg\max_{x} P_\theta(x \mid x_{\le t})
 $$
 
 Inference proceeds **autoregressively** until a stop condition (e.g., `<eos>`).
@@ -167,9 +167,4 @@ quant_model = quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)
 3. **Quantization** enables deployment on low-resource hardware.
 4. Combined, these yield *efficient*, *adaptable* language models.
 
----
-
-```{admonition} Next Module
-Continue to: [Inference, Prompting, and Fine-tuning](VLMs/01_intro_vlms.md)
-```
 
