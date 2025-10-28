@@ -1,4 +1,6 @@
-# Introduction to Large Language Models (LLMs)
+---
+title: Introduction to Large Language Models (LLMs)
+---
 
 ```{note}
 **Learning Objectives**
@@ -18,7 +20,7 @@ At their core, they learn how likely a sequence of tokens is, and how to predict
 
 ```{admonition} Discussion
 **Why probability modeling?**  
-Next-token prediction converts the open-ended task of “understand language” into a precise statistical objective. When trained at scale, the model implicitly picks up syntax, semantics, factual associations, and task structure as *by-products* of minimizing predictive error [1, 14, 15].  
+Next-token prediction converts the open-ended task of “understand language” into a precise statistical objective. When trained at scale, the model implicitly picks up syntax, semantics, factual associations, and task structure as *by-products* of minimizing predictive error [1, 2, 3].  
 
 **Measuring quality.**  
 Two ubiquitous metrics are **negative log-likelihood** (NLL) and **perplexity**:  
@@ -27,7 +29,7 @@ $$
 \text{PPL} = \exp\!\left(\frac{1}{T}\sum_{t=1}^{T} -\log P_\theta(w_t \mid w_{<t})\right).
 $$
 
-Lower is better; it corresponds to the model assigning higher probability to the observed text. Perplexity correlates with intrinsic modeling quality but not always with downstream utility; evaluations on tasks/benchmarks are also important [14].
+Lower is better; it corresponds to the model assigning higher probability to the observed text. Perplexity correlates with intrinsic modeling quality but not always with downstream utility; evaluations on tasks/benchmarks are also important [2].
 ```
 
 ## 1.1 Problem Setup (Language Modeling)
@@ -61,10 +63,10 @@ Think of the model as a powerful **autocomplete**: given a prefix, it learns to 
 During training/inference, attention is masked so each position $t$ can only attend to $w_{\le t}$; this enforces autoregressive factorization.  
 
 **Optimization.**  
-In practice, the objective becomes **cross-entropy** loss optimized by first-order methods like Adam/AdamW [16, 17], often with warmup + cosine decay schedules.  
+In practice, the objective becomes **cross-entropy** loss optimized by first-order methods like Adam/AdamW [4, 5], often with warmup + cosine decay schedules.  
 
 **Decoding.**  
-Greedy decode maximizes local probability; *stochastic* decoding (top-$k$, nucleus/top-$p$) often yields higher-quality generations. Nucleus sampling selects the smallest set of tokens whose cumulative probability exceeds $p$ [18].
+Greedy decode maximizes local probability; *stochastic* decoding (top-$k$, nucleus/top-$p$) often yields higher-quality generations. Nucleus sampling selects the smallest set of tokens whose cumulative probability exceeds $p$ [6].
 ```
 
 ## 1.2 From Tokens to Probabilities
@@ -105,14 +107,14 @@ where $z_{t,i}$ is the logit corresponding to token $v_i$, and the denominator e
 
 ```{admonition} Discussion
 **Weight tying.**  
-Many LMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity [19].  
+Many LMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity [7].  
 
 **Temperature.**  
 Sampling temperature $\tau$ rescales logits: $\text{softmax}(z_t/\tau)$.  
 Higher $\tau$ → more diverse; lower $\tau$ → more deterministic.  
 
 **Calibration and confidence.**  
-Logits are not probabilities until normalized; even then, probabilities can be miscalibrated—especially OOD. Techniques like temperature scaling can help [20].
+Logits are not probabilities until normalized; even then, probabilities can be miscalibrated—especially OOD. Techniques like temperature scaling can help [8].
 ```
 
 # 2 From Words to Tokens
@@ -125,7 +127,7 @@ This allows the model to handle any text (including rare or unseen words) effici
 
 ```{admonition} Discussion
 **Subword methods.**  
-Byte-Pair Encoding (BPE) and its modern variants learn merges that balance vocabulary size with coverage [2]. SentencePiece implements **unigram** and **BPE** with language-agnostic, whitespace-free processing [3]. GPT-2 uses byte-level BPE to robustly handle Unicode and rare strings [4].  
+Byte-Pair Encoding (BPE) and its modern variants learn merges that balance vocabulary size with coverage [9]. SentencePiece implements **unigram** and **BPE** with language-agnostic, whitespace-free processing [10]. GPT-2 uses byte-level BPE to robustly handle Unicode and rare strings [11].  
 ```
 
 ## 2.2 Example: GPT-2 Tokenizer
@@ -182,7 +184,7 @@ torch.Size([5, 8])
 Real systems include special IDs for BOS/EOS, padding, and sometimes system-role markers. Padding masks must be respected in attention and loss.  
 
 **Byte-level vs. wordpiece.**  
-Byte-level tokenizers guarantee coverage (everything is representable) at the cost of longer sequences on average [4]; wordpiece/unigram trade vocabulary size against splitting frequency [3].
+Byte-level tokenizers guarantee coverage (everything is representable) at the cost of longer sequences on average [11]; wordpiece/unigram trade vocabulary size against splitting frequency [10].
 ```
 
 # 3 Transformer Architecture: The Engine of LLMs
@@ -209,13 +211,13 @@ Both MHA and FFN are followed by **Layer Normalization** to stabilize training.
 
 ```{admonition} Discussion
 **Pre-LN vs Post-LN.**  
-Modern LLMs use **Pre-LayerNorm** (normalize *before* sublayers) for stability at depth [21].  
+Modern LLMs use **Pre-LayerNorm** (normalize *before* sublayers) for stability at depth [12].  
 
 **FFN activations.**  
-SwiGLU/GeGLU activations often outperform ReLU/GELU at similar compute [22].  
+SwiGLU/GeGLU activations often outperform ReLU/GELU at similar compute [13].  
 
 **Scaling.**  
-Compute/memory grow with depth, width, and sequence length. Architectural choices (attention type, FFN size, normalization) trade efficiency vs. quality [1, 14, 23].
+Compute/memory grow with depth, width, and sequence length. Architectural choices (attention type, FFN size, normalization) trade efficiency vs. quality [1, 2, 14].
 ```
 
 ## 3.2 Self-Attention Mechanism
@@ -268,7 +270,7 @@ Context shape: (4, 8)
 
 ```{admonition} Discussion
 **Causal mask & complexity.**  
-Autoregressive models add a triangular mask so tokens can’t peek ahead. Vanilla attention is $O(T^2)$ in memory and compute. **FlashAttention** reorders computations to reduce memory traffic, enabling longer contexts at high throughput [5]. Other efficient variants approximate attention with kernels or sparsity [6].  
+Autoregressive models add a triangular mask so tokens can’t peek ahead. Vanilla attention is $O(T^2)$ in memory and compute. **FlashAttention** reorders computations to reduce memory traffic, enabling longer contexts at high throughput [15]. Other efficient variants approximate attention with kernels or sparsity [16].  
 ```
 
 ## 3.3 Multi-Head Attention (MHA)
@@ -302,7 +304,7 @@ out.shape, weights.shape
 
 ```{admonition} Discussion
 **Heads as pattern detectors.**  
-Some heads learn syntactic relations; others track long-range discourse. Pruning or merging heads can save compute with minimal loss in large models [24].
+Some heads learn syntactic relations; others track long-range discourse. Pruning or merging heads can save compute with minimal loss in large models [17].
 ```
 
 ## 3.4 Feedforward Network (FFN)
@@ -402,7 +404,7 @@ tensor([[ 0.0000,  1.0000,  0.0000,  1.0000,  0.0000,  1.0000,  0.0000,  1.0000]
 
 ```{admonition} Discussion
 **Alternatives in practice.**  
-Many LLMs learn **absolute** position embeddings; others use **rotary** (RoPE) to encode **relative** phase information and extrapolate better to long context [9]. **ALiBi** adds head-specific slopes to attention scores for strong length generalization without extra parameters [10].  
+Many LLMs learn **absolute** position embeddings; others use **rotary** (RoPE) to encode **relative** phase information and extrapolate better to long context [18]. **ALiBi** adds head-specific slopes to attention scores for strong length generalization without extra parameters [19].  
 ```
 
 # 5 Putting It All Together
@@ -491,25 +493,22 @@ Run the interactive version in Colab:
 
 # References
 
-[1] Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS 2017. \\
-[2] Sennrich, R., et al. (2016). Neural MT of Rare Words with Subword Units. ACL (BPE). \\
-[3] Kudo, T., Richardson, J. (2018). SentencePiece: A simple and language independent subword tokenizer. EMNLP: System Demos. \\
-[4] Radford, A., et al. (2019). Language Models are Unsupervised Multitask Learners. OpenAI Technical Report (GPT-2, byte-level BPE). \\
-[5] Dao, T., et al. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness. NeurIPS. \\
-[6] Choromanski, K., et al. (2021). Rethinking Attention with Performers. ICLR. \\
-[7] Kaplan, J., et al. (2020). Scaling Laws for Neural Language Models. arXiv:2001.08361. \\
-[8] Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models. *Chinchilla*, arXiv:2203.15556. \\
-[9] Su, J., et al. (2021). RoFormer: Transformer with Rotary Position Embedding. NeurIPS. \\
-[10] Press, O., et al. (2022). Train Short, Test Long: Attention with Linear Biases (ALiBi).  arXiv:2108.12409. \\
-[14] Brown, T. B., et al. (2020). Language Models are Few-Shot Learners. NeurIPS (GPT-3). \\
-[15] Touvron, H., et al. (2023). LLaMA: Open and Efficient Foundation Language Models. arXiv:2302.13971. \\
-[16] Kingma, D. P., Ba, J. (2015). Adam: A Method for Stochastic Optimization. ICLR. \\
-[17] Loshchilov, I., Hutter, F. (2019). Decoupled Weight Decay Regularization (AdamW). ICLR. \\
-[18] Holtzman, A., et al. (2020). The Curious Case of Neural Text Degeneration (nucleus sampling). ICLR. \\
-[19] Press, O., Wolf, L. (2017). Using the Output Embedding to Improve Language Models (Weight Tying). EACL. \\
-[20] Guo, C., et al. (2017). On Calibration of Modern Neural Networks. ICML. \\
-[21] Xiong, R., et al. (2020). On Layer Normalization in the Transformer Architecture. ICML. \\
-[22] Shazeer, N. (2020). GLU Variants Improve Transformer. arXiv:2002.05202 (SwiGLU). \\
-[23] Dao, T. (2023). FlashAttention-2 & Practical Long-Context Training. \\
-[24] Michel, P., Levy, O., Neubig, G. (2019). Are Sixteen Heads Really Better than One? NeurIPS. \\
-[25] Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS (RLHF). \\
+1. **Vaswani, A., et al.** (2017). *Attention is All You Need*. NeurIPS 2017.  
+2. **Brown, T. B., et al.** (2020). *Language Models are Few-Shot Learners*. NeurIPS (GPT-3).  
+3. **Touvron, H., et al.** (2023). *LLaMA: Open and Efficient Foundation Language Models*. arXiv:2302.13971.  
+4. **Kingma, D. P., Ba, J.** (2015). *Adam: A Method for Stochastic Optimization*. ICLR.  
+5. **Loshchilov, I., Hutter, F.** (2019). *Decoupled Weight Decay Regularization (AdamW)*. ICLR.  
+6. **Holtzman, A., et al.** (2020). *The Curious Case of Neural Text Degeneration (nucleus sampling)*. ICLR.  
+7. **Press, O., Wolf, L.** (2017). *Using the Output Embedding to Improve Language Models (Weight Tying)*. EACL.  
+8. **Guo, C., et al.** (2017). *On Calibration of Modern Neural Networks*. ICML.  
+9. **Sennrich, R., et al.** (2016). *Neural MT of Rare Words with Subword Units*. ACL (BPE).  
+10. **Kudo, T., Richardson, J.** (2018). *SentencePiece: A simple and language independent subword tokenizer*. EMNLP: System Demos.  
+11. **Radford, A., et al.** (2019). *Language Models are Unsupervised Multitask Learners*. OpenAI Technical Report (GPT-2, byte-level BPE).  
+12. **Xiong, R., et al.** (2020). *On Layer Normalization in the Transformer Architecture*. ICML.  
+13. **Shazeer, N.** (2020). *GLU Variants Improve Transformer*. arXiv:2002.05202 (SwiGLU).  
+14. **Dao, T.** (2023). *FlashAttention-2 & Practical Long-Context Training*.  
+15. **Dao, T., et al.** (2022). *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*. NeurIPS.  
+16. **Choromanski, K., et al.** (2021). *Rethinking Attention with Performers*. ICLR.  
+17. **Michel, P., Levy, O., Neubig, G.** (2019). *Are Sixteen Heads Really Better than One?* NeurIPS.  
+18. **Su, J., et al.** (2021). *RoFormer: Transformer with Rotary Position Embedding*. NeurIPS.  
+19. **Press, O., et al.** (2022). *Train Short, Test Long: Attention with Linear Biases (ALiBi)*. arXiv:2108.12409.  
