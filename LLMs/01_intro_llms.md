@@ -490,8 +490,6 @@ Run the interactive version in Colab:
 # References
 
 ```{bibliography}
-:filter: docname in docnames
-
 [1] Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS 2017.
 [2] Sennrich, R., et al. (2016). Neural MT of Rare Words with Subword Units. ACL (BPE).
 [3] Kudo, T., Richardson, J. (2018). SentencePiece: A simple and language independent subword tokenizer. EMNLP: System Demos.
