@@ -8,9 +8,10 @@ project:
   exclude:
     - hello_world.md
     - README.md
+    - notebooks/
 toc:
   - file: syllabus.md
-  - title: LLMs
+  - title: Large Language Models
     children:
       - file: LLMs/01_intro_llms.md
       - file: LLMs/02_transformer_math.md

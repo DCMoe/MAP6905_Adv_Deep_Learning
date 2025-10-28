@@ -11,49 +11,23 @@
 - **Instructor:** Prof. Achraf Cohen
   - Mathematics and Statistics  
   - Building 4, Room 337B (Main Campus)  
-  - Email: acohen@uwf.edu :::
+  - Email: acohen@uwf.edu 
+:::
 
 ## Course Description
 
 This directed study investigates the advanced topics in Deep Learning for Artificial Intelligence. Topics include:
 
-- Matrix theory for understanding and improving optimization algorithms (vector spaces, ranks, block operations, decompositions)
-- Tensor factorization techniques relevant to modern architectures
-- Stochastic gradient descent (SGD) and adaptive optimizers
-- Stability of large-scale training (conditioning, vanishing/exploding gradients)
-- Second-order optimization methods (natural gradient, quasi-Newton)
-- Model compression strategies: quantization, pruning, distillation, low-rank approximations
-- Scaling laws, training dynamics, and hardware-aware optimization
-- Evaluation metrics beyond accuracy: FLOPs, latency, memory footprint, energy cost
+- Large Language Models (LLMs)
+- Prompt Engineering
+- Vision Language Models (VLMs)
 
 Students will develop the mathematical and computational background to contribute to state-of-the-art research in model compression and efficient large-scale AI.
-
-## Topics Covered
-
-- Matrix theory foundations for deep learning
-- Block matrix multiplications and tensor factorization
-- Stochastic gradient descent and adaptive optimizers (Adam, RMSProp, etc.)
-- Numerical stability in optimization: conditioning, exploding/vanishing gradients, preconditioning
-- Second-order optimization algorithms: natural gradient, quasi-Newton, Fisher-based methods
-- Probabilistic and information-theoretic tools: entropy, KL divergence, variational inference
-- Model compression: quantization, structured/unstructured pruning, knowledge distillation
-- Hardware-aware optimization: mixed-precision training, quantization-aware training
-- Scaling laws and training dynamics of large AI models
-- Evaluation metrics for efficiency: FLOPs, throughput, latency, memory footprint, and accuracy trade-offs
 
 ## Course Work
 
 Students are expected to create an **online e-Book** synthesizing the material, with simplified explanations, references to videos, and interactive examples. Computational notebooks should be organized in a **public GitHub repository** for reproducibility.
 
-## Expected Outcomes
-
-After this course, students will be able to:
-
-- Demonstrate mastery of matrix theory applied to deep learning
-- Explain modern model compression techniques from a matrix theory perspective
-- Understand advanced optimization algorithms, including second-order methods
-- Apply probabilistic and information-theoretic concepts to optimization and compression
-- Produce professional-quality documentation and computational notebooks
 
 ## Grading
 
