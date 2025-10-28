@@ -491,25 +491,25 @@ Run the interactive version in Colab:
 
 # References
 
-[1] Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS 2017.
-[2] Sennrich, R., et al. (2016). Neural MT of Rare Words with Subword Units. ACL (BPE).
-[3] Kudo, T., Richardson, J. (2018). SentencePiece: A simple and language independent subword tokenizer. EMNLP: System Demos.
-[4] Radford, A., et al. (2019). Language Models are Unsupervised Multitask Learners. OpenAI Technical Report (GPT-2, byte-level BPE).
-[5] Dao, T., et al. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness. NeurIPS.
-[6] Choromanski, K., et al. (2021). Rethinking Attention with Performers. ICLR.
-[7] Kaplan, J., et al. (2020). Scaling Laws for Neural Language Models. arXiv:2001.08361.
-[8] Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models. *Chinchilla*, arXiv:2203.15556.
-[9] Su, J., et al. (2021). RoFormer: Transformer with Rotary Position Embedding. NeurIPS.
-[10] Press, O., et al. (2022). Train Short, Test Long: Attention with Linear Biases (ALiBi). arXiv:2108.12409.
-[14] Brown, T. B., et al. (2020). Language Models are Few-Shot Learners. NeurIPS (GPT-3).
-[15] Touvron, H., et al. (2023). LLaMA: Open and Efficient Foundation Language Models. arXiv:2302.13971.
-[16] Kingma, D. P., Ba, J. (2015). Adam: A Method for Stochastic Optimization. ICLR.
-[17] Loshchilov, I., Hutter, F. (2019). Decoupled Weight Decay Regularization (AdamW). ICLR.
-[18] Holtzman, A., et al. (2020). The Curious Case of Neural Text Degeneration (nucleus sampling). ICLR.
-[19] Press, O., Wolf, L. (2017). Using the Output Embedding to Improve Language Models (Weight Tying). EACL.
-[20] Guo, C., et al. (2017). On Calibration of Modern Neural Networks. ICML.
-[21] Xiong, R., et al. (2020). On Layer Normalization in the Transformer Architecture. ICML.
-[22] Shazeer, N. (2020). GLU Variants Improve Transformer. arXiv:2002.05202 (SwiGLU).
-[23] Dao, T. (2023). FlashAttention-2 & Practical Long-Context Training.
-[24] Michel, P., Levy, O., Neubig, G. (2019). Are Sixteen Heads Really Better than One? NeurIPS.
-[25] Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS (RLHF).
+[1] Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS 2017. \\
+[2] Sennrich, R., et al. (2016). Neural MT of Rare Words with Subword Units. ACL (BPE). \\
+[3] Kudo, T., Richardson, J. (2018). SentencePiece: A simple and language independent subword tokenizer. EMNLP: System Demos. \\
+[4] Radford, A., et al. (2019). Language Models are Unsupervised Multitask Learners. OpenAI Technical Report (GPT-2, byte-level BPE). \\
+[5] Dao, T., et al. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness. NeurIPS. \\
+[6] Choromanski, K., et al. (2021). Rethinking Attention with Performers. ICLR. \\
+[7] Kaplan, J., et al. (2020). Scaling Laws for Neural Language Models. arXiv:2001.08361. \\
+[8] Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models. *Chinchilla*, arXiv:2203.15556. \\
+[9] Su, J., et al. (2021). RoFormer: Transformer with Rotary Position Embedding. NeurIPS. \\
+[10] Press, O., et al. (2022). Train Short, Test Long: Attention with Linear Biases (ALiBi).  arXiv:2108.12409. \\
+[14] Brown, T. B., et al. (2020). Language Models are Few-Shot Learners. NeurIPS (GPT-3). \\
+[15] Touvron, H., et al. (2023). LLaMA: Open and Efficient Foundation Language Models. arXiv:2302.13971. \\
+[16] Kingma, D. P., Ba, J. (2015). Adam: A Method for Stochastic Optimization. ICLR. \\
+[17] Loshchilov, I., Hutter, F. (2019). Decoupled Weight Decay Regularization (AdamW). ICLR. \\
+[18] Holtzman, A., et al. (2020). The Curious Case of Neural Text Degeneration (nucleus sampling). ICLR. \\
+[19] Press, O., Wolf, L. (2017). Using the Output Embedding to Improve Language Models (Weight Tying). EACL. \\
+[20] Guo, C., et al. (2017). On Calibration of Modern Neural Networks. ICML. \\
+[21] Xiong, R., et al. (2020). On Layer Normalization in the Transformer Architecture. ICML. \\
+[22] Shazeer, N. (2020). GLU Variants Improve Transformer. arXiv:2002.05202 (SwiGLU). \\
+[23] Dao, T. (2023). FlashAttention-2 & Practical Long-Context Training. \\
+[24] Michel, P., Levy, O., Neubig, G. (2019). Are Sixteen Heads Really Better than One? NeurIPS. \\
+[25] Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS (RLHF). \\
