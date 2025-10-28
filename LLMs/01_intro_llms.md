@@ -487,9 +487,10 @@ Run the interactive version in Colab:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_intro.ipynb)
 
+---
+
 # References
 
-```{bibliography}
 [1] Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS 2017.
 [2] Sennrich, R., et al. (2016). Neural MT of Rare Words with Subword Units. ACL (BPE).
 [3] Kudo, T., Richardson, J. (2018). SentencePiece: A simple and language independent subword tokenizer. EMNLP: System Demos.
@@ -512,4 +513,3 @@ Run the interactive version in Colab:
 [23] Dao, T. (2023). FlashAttention-2 & Practical Long-Context Training.
 [24] Michel, P., Levy, O., Neubig, G. (2019). Are Sixteen Heads Really Better than One? NeurIPS.
 [25] Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS (RLHF).
-```
