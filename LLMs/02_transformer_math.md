@@ -523,11 +523,7 @@ Validation Loss: 3.2068 | Perplexity: 24.70
 
 ## 5 Colab Notebook & Reproducibility
 
-```{link-button} https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_training.ipynb
-:text: Open In Colab
-:type: button
-:classes: btn-outline-success
-```
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_training.ipynb)
 
 ```{admonition} Reproducibility Tips
 :class: warning
