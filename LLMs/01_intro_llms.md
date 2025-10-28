@@ -13,6 +13,11 @@ By the end of this module, you will be able to:
 - Run and visualize basic LLM operations in PyTorch.
 ```
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5sLYAQS9sWQ?si=AtFx17RCIfVCg_m7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LPZh9BOjkQs?si=S7eYoUVl3TvOz108" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
 # 1 What is a Large Language Model?
 
 Large Language Models (LLMs) are neural networks trained to model **the probability of text sequences**.  
