@@ -14,7 +14,7 @@ By the end of this module, you will be able to:
 
 ## VLM Inference Notebook: Using Pre-trained VLMs
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/llm_inference.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DCMoe/MAP6905_Adv_Deep_Learning/blob/main/notebooks/vlm_inference.ipynb)
 
 ### Purpose
 This notebook demonstrates how to use pre-trained VLMs for various tasks **without any training**. You'll learn to leverage existing models for immediate applications.
@@ -50,10 +50,7 @@ This notebook shows you how to **quickly and efficiently fine-tune Google’s Ge
 
 Before or during this notebook, watch this tutorial on fine-tuning with LoRA:
 
-```{youtube} 3ypHZayanBI
-:width: 100%
-:align: center
-```
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3ypHZayanBI?si=ivB8xpzYlSAcUtA7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 :::{admonition} Video Guide
 :class: note

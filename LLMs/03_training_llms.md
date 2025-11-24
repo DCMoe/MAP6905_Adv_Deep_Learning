@@ -66,7 +66,7 @@ Cross-entropy loss: 2.10889
 
 ## 2 Masking Strategies
 
-In masked language modeling (BERT-style) {cite}`devlin2019bert`:
+In masked language modeling (BERT-style) {cite}`devlin2018bert`:
 
 * **15 %** of tokens are selected for prediction.
 * Of those:
@@ -123,7 +123,7 @@ name: training-loss-curve
 brown2020language
 radford2019language
 touvron2023llama
-devlin2019bert
+devlin2018bert
 goodfellow2016deep
 vaswani2017attention
 ```
