@@ -21,5 +21,11 @@ toc:
     children:
       - file: Prompt_Engineering/01_foundations.md
       - file: Prompt_Engineering/02_instruct_tune.md
+  - title: Vision Language Models
+    children:
+      - file: VLMs/01_foundations.md
+      - file: VLMs/02_transformer_math.md
+      - file: VLMs/03_lora_training.md
+      - file: VLMs/04_notebooks_overview.md
 site:
   template: book-theme

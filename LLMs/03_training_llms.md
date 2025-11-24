@@ -1,4 +1,6 @@
-# LLM Training Objectives
+---
+title: LLM Training Objectives
+---
 
 ```{note}
 **Learning Objectives**
@@ -28,17 +30,17 @@ At time $t$, predict the next token $x_t$ given $x_{<t}$:
 $$
 \mathcal{L}_{\text{CLM}}
 =
-- \sum_{t=1}^{T} \log P_\theta(x_t \mid x_{<t}).
+- \sum_{t=1}^{T} \log P_\theta(x_t \mid x_{<t}) \tag{1}
 $$
 
 ### 1.2 Masked LM
 
-Mask a subset of tokens $M \subset {1,\dots,T}$, and train the model to predict them:
+Mask a subset of tokens $M \subset \{1,\dots,T\}$, and train the model to predict them:
 
 $$
 \mathcal{L}_{\text{MLM}}
 =
-- \sum_{t \in M} \log P_\theta(x_t \mid x_{\setminus M}).
+- \sum_{t \in M} \log P_\theta(x_t \mid x_{\setminus M}) \tag{2}
 $$
 
 ---
@@ -64,7 +66,7 @@ Cross-entropy loss: 2.10889
 
 ## 2 Masking Strategies
 
-In masked language modeling (BERT-style):
+In masked language modeling (BERT-style) {cite}`devlin2019bert`:
 
 * **15 %** of tokens are selected for prediction.
 * Of those:
@@ -109,3 +111,19 @@ name: training-loss-curve
 | **Masked LM Loss** | $\mathcal{L}=-\sum_{t\in M}\log P(x_t\mid x_{\setminus M})$ | Fill-in-the-blank training              |
 | **Softmax Prob.**  | $p_i = e^{z_i}/\sum_j e^{z_j}$                              | Converts logits to probabilities        |
 | **Cross-Entropy**  | $\mathcal{L}=-\sum_i y_i\log p_i$                           | Penalizes low probability on true label |
+
+---
+
+## References
+
+```{bibliography}
+:style: unsrt
+:filter: False
+
+brown2020language
+radford2019language
+touvron2023llama
+devlin2019bert
+goodfellow2016deep
+vaswani2017attention
+```

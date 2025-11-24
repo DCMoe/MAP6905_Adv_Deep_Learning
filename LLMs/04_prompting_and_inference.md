@@ -1,4 +1,6 @@
-# Inference, Prompting, and Fine-tuning
+---
+title: Inference, Prompting, and Fine-tuning
+---
 
 ```{note}
 **Learning Objectives**
@@ -23,7 +25,7 @@ $$
 \hat{x}_{t+1} = \arg\max_{x} P_\theta(x \mid x_{\le t})
 $$
 
-Inference proceeds **autoregressively** until a stop condition (e.g., `<eos>`).
+Inference proceeds **autoregressively** until a stop condition (e.g., `<eos>`) {cite}`radford2019language,brown2020language`.
 
 ---
 
@@ -73,6 +75,8 @@ name: top-p-decode
 ---
 ```
 
+Nucleus (top-p) sampling was introduced by {cite}`holtzman2020curious` and is now the default in most modern LLMs.
+
 ---
 
 ## 3 Prompting as Conditional Inference
@@ -93,7 +97,7 @@ Types of prompting:
 | **Chain-of-Thought** | “Let’s reason step-by-step.”     | Improves reasoning  |
 | **Instruction**      | “Explain why the sky is blue.”   | Aligned outputs     |
 
-> Prompting acts like temporary fine-tuning in context—no weights are changed.
+> Prompting acts like temporary fine-tuning in context—no weights are changed {cite}`brown2020language`.
 
 ---
 
@@ -113,10 +117,10 @@ Only small subsets of weights or adapters are trained.
 
 #### 4.2.1 Low-Rank Adaptation (LoRA)
 
-LoRA inserts low-rank matrices into linear layers:
+LoRA inserts low-rank matrices into linear layers {cite}`hu2021lora`:
 
 $$
-W\prime = W + \Delta W = W + A B^\top
+W' = W + \Delta W = W + A B^\top
 $$
 
 where
@@ -163,8 +167,20 @@ quant_model = quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)
 ## 6 Putting It All Together
 
 1. **Prompting** guides inference without updating weights.
-2. **LoRA fine-tuning** updates small adapters for specific tasks.
+2. **LoRA fine-tuning** updates small adapters for specific tasks {cite}`hu2021lora`.
 3. **Quantization** enables deployment on low-resource hardware.
 4. Combined, these yield *efficient*, *adaptable* language models.
 
+---
 
+## References
+
+```{bibliography}
+:style: unsrt
+:filter: False
+
+radford2019language
+brown2020language
+holtzman2020curious
+hu2021lora
+```

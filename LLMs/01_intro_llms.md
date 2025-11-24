@@ -25,7 +25,7 @@ At their core, they learn how likely a sequence of tokens is, and how to predict
 
 ```{admonition} Discussion
 **Why probability modeling?**  
-Next-token prediction converts the open-ended task of “understand language” into a precise statistical objective. When trained at scale, the model implicitly picks up syntax, semantics, factual associations, and task structure as *by-products* of minimizing predictive error [1, 2, 3].  
+Next-token prediction converts the open-ended task of “understand language” into a precise statistical objective. When trained at scale, the model implicitly picks up syntax, semantics, factual associations, and task structure as *by-products* of minimizing predictive error {cite}`vaswani2017attention,brown2020language,touvron2023llama`.  
 
 **Measuring quality.**  
 Two ubiquitous metrics are **negative log-likelihood** (NLL) and **perplexity**:  
@@ -34,7 +34,7 @@ $$
 \text{PPL} = \exp\!\left(\frac{1}{T}\sum_{t=1}^{T} -\log P_\theta(w_t \mid w_{<t})\right).
 $$
 
-Lower is better; it corresponds to the model assigning higher probability to the observed text. Perplexity correlates with intrinsic modeling quality but not always with downstream utility; evaluations on tasks/benchmarks are also important [2].
+Lower is better; it corresponds to the model assigning higher probability to the observed text. Perplexity correlates with intrinsic modeling quality but not always with downstream utility; evaluations on tasks/benchmarks are also important {cite}`brown2020language`.
 ```
 
 ## 1.1 Problem Setup (Language Modeling)
@@ -68,10 +68,10 @@ Think of the model as a powerful **autocomplete**: given a prefix, it learns to 
 During training/inference, attention is masked so each position $t$ can only attend to $w_{\le t}$; this enforces autoregressive factorization.  
 
 **Optimization.**  
-In practice, the objective becomes **cross-entropy** loss optimized by first-order methods like Adam/AdamW [4, 5], often with warmup + cosine decay schedules.  
+In practice, the objective becomes **cross-entropy** loss optimized by first-order methods like Adam/AdamW {cite}`kingma2015adam,loshchilov2019decoupled`, often with warmup + cosine decay schedules.  
 
 **Decoding.**  
-Greedy decode maximizes local probability; *stochastic* decoding (top-$k$, nucleus/top-$p$) often yields higher-quality generations. Nucleus sampling selects the smallest set of tokens whose cumulative probability exceeds $p$ [6].
+Greedy decode maximizes local probability; *stochastic* decoding (top-$k$, nucleus/top-$p$) often yields higher-quality generations. Nucleus sampling selects the smallest set of tokens whose cumulative probability exceeds $p$ {cite}`holtzman2020curious`.
 ```
 
 ## 1.2 From Tokens to Probabilities
@@ -112,304 +112,179 @@ where $z_{t,i}$ is the logit corresponding to token $v_i$, and the denominator e
 
 ```{admonition} Discussion
 **Weight tying.**  
-Many LMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity [7].  
+Many LMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity {cite}`press2017using`.  
 
 **Temperature.**  
 Sampling temperature $\tau$ rescales logits: $\text{softmax}(z_t/\tau)$.  
-Higher $\tau$ → more diverse; lower $\tau$ → more deterministic.  
+Higher $\tau$ → more diverse; lower $\tau$ → more focused.  
 
-**Calibration and confidence.**  
-Logits are not probabilities until normalized; even then, probabilities can be miscalibrated—especially OOD. Techniques like temperature scaling can help [8].
+**Calibration.**  
+Raw softmax probabilities from LLMs are often overconfident; post-hoc calibration methods can adjust them {cite}`guo2017calibration`.
 ```
-
-# 2 From Words to Tokens
-
-## 2.1 Why Tokenization Matters
-
-Raw text is composed of characters, but models operate on discrete **vocabulary indices**.  
-Tokenization bridges this gap by splitting text into subword units and mapping them to integers.  
-This allows the model to handle any text (including rare or unseen words) efficiently.
-
-```{admonition} Discussion
-**Subword methods.**  
-Byte-Pair Encoding (BPE) and its modern variants learn merges that balance vocabulary size with coverage [9]. SentencePiece implements **unigram** and **BPE** with language-agnostic, whitespace-free processing [10]. GPT-2 uses byte-level BPE to robustly handle Unicode and rare strings [11].  
-```
-
-## 2.2 Example: GPT-2 Tokenizer
-
-```{code-cell} python
-from transformers import AutoTokenizer
-
-tokenizer = AutoTokenizer.from_pretrained("gpt2")
-text = "Transformers are powerful models."
-tokens = tokenizer.tokenize(text)
-token_ids = tokenizer.encode(text)
-print('Tokens:', tokens)
-print('Token IDs:', token_ids)
-```
-
-```{code-cell} output
-Tokens: ['Transform', 'ers', 'Ġare', 'Ġpowerful', 'Ġmodels', '.']
-Token IDs: [41762, 364, 389, 3665, 4981, 13]
-```
-
-## 2.3 Mathematical Representation
-
-After tokenization, each token index $w_t$ is mapped to a vector embedding $x_t$ using an **embedding matrix** $E\in\mathbb{R}^{V\times d}$:
-
-$$
-x_t = E[w_t], \quad x_t \in \mathbb{R}^d.
-$$
-
-The model receives the input sequence as a matrix:
-
-$$
-X = [x_1, x_2, \ldots, x_T]^\top \in \mathbb{R}^{T\times d}.
-$$
-
-```{code-cell} python
-import torch
-import torch.nn as nn
-
-V, d = 50000, 8  # toy vocabulary and embedding size
-embedding = nn.Embedding(V, d)
-
-# Example: 5-token sequence
-token_ids = torch.tensor([48423, 389, 20133, 2147, 13])
-X = embedding(token_ids)
-X.shape
-```
-
-```{code-cell} output
-torch.Size([5, 8])
-```
-
-```{admonition} Discussion
-**Special tokens.**  
-Real systems include special IDs for BOS/EOS, padding, and sometimes system-role markers. Padding masks must be respected in attention and loss.  
-
-**Byte-level vs. wordpiece.**  
-Byte-level tokenizers guarantee coverage (everything is representable) at the cost of longer sequences on average [11]; wordpiece/unigram trade vocabulary size against splitting frequency [10].
-```
-
-# 3 Transformer Architecture: The Engine of LLMs
-
-## 3.1 High-Level Structure
-
-A Transformer consists of multiple stacked **blocks**, each containing:
-
-1. Multi-Head Self-Attention (MHA)  
-2. Feedforward Neural Network (FFN)  
-3. Layer Normalization  
-4. Residual Connections
-
-Formally, for the input matrix $X_l \in \mathbb{R}^{T \times d}$ at layer $l$:
-
-$$
-\begin{aligned}
-H_l &= X_l + \text{MHA}(X_l), \\
-X_{l+1} &= H_l + \text{FFN}(H_l).
-\end{aligned}
-$$
-
-Both MHA and FFN are followed by **Layer Normalization** to stabilize training.
-
-```{admonition} Discussion
-**Pre-LN vs Post-LN.**  
-Modern LLMs use **Pre-LayerNorm** (normalize *before* sublayers) for stability at depth [12].  
-
-**FFN activations.**  
-SwiGLU/GeGLU activations often outperform ReLU/GELU at similar compute [13].  
-
-**Scaling.**  
-Compute/memory grow with depth, width, and sequence length. Architectural choices (attention type, FFN size, normalization) trade efficiency vs. quality [1, 2, 14].
-```
-
-## 3.2 Self-Attention Mechanism
-
-### Step 1: Compute Query, Key, and Value matrices
-
-$$
-Q = XW_Q, \quad K = XW_K, \quad V = XW_V,
-$$
-
-where $W_Q, W_K, W_V \in \mathbb{R}^{d \times d_k}$ are learned projection matrices.
-
-### Step 2: Compute attention weights
-
-$$
-A = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right).
-$$
-
-### Step 3: Weighted sum of values
-
-$$
-Z = AV.
-$$
-
-```{code-cell} python
-import torch
-import torch.nn.functional as F
-
-T, d = 4, 8
-X = torch.rand(T, d)
-W_Q = torch.rand(d, d)
-W_K = torch.rand(d, d)
-W_V = torch.rand(d, d)
-
-Q = X @ W_Q
-K = X @ W_K
-V = X @ W_V
-
-A = F.softmax(Q @ K.T / (d ** 0.5), dim=-1)  # attention weights
-Z = A @ V
-
-print('Attention weights shape:', tuple(A.shape))
-print('Context shape:', tuple(Z.shape))
-```
-
-```{code-cell} output
-Attention weights shape: (4, 4)
-Context shape: (4, 8)
-```
-
-```{admonition} Discussion
-**Causal mask & complexity.**  
-Autoregressive models add a triangular mask so tokens can’t peek ahead. Vanilla attention is $O(T^2)$ in memory and compute. **FlashAttention** reorders computations to reduce memory traffic, enabling longer contexts at high throughput [15]. Other efficient variants approximate attention with kernels or sparsity [16].  
-```
-
-## 3.3 Multi-Head Attention (MHA)
-
-Each head $h_i$ performs self-attention independently:
-
-$$
-h_i = \mathrm{Attention}(Q_i, K_i, V_i),
-$$
-
-and their outputs are concatenated:
-
-$$
-\mathrm{MHA}(X) = \mathrm{Concat}(h_1, h_2, \ldots, h_H)W_O,
-$$
-
-where $W_O \in \mathbb{R}^{Hd_k \times d}$.
-
-```{code-cell} python
-import torch.nn as nn
-
-mha = nn.MultiheadAttention(embed_dim=8, num_heads=2, batch_first=True)
-X = torch.rand(1, 4, 8)  # (batch, tokens, dim)
-out, weights = mha(X, X, X)
-out.shape, weights.shape
-```
-
-```{code-cell} output
-(torch.Size([1, 4, 8]), torch.Size([1, 2, 4, 4]))
-```
-
-```{admonition} Discussion
-**Heads as pattern detectors.**  
-Some heads learn syntactic relations; others track long-range discourse. Pruning or merging heads can save compute with minimal loss in large models [17].
-```
-
-## 3.4 Feedforward Network (FFN)
-
-$$
-\text{FFN}(x) = \sigma(x W_1 + b_1) W_2 + b_2,
-$$
-
-where $\sigma$ is typically GELU or (Swi)GLU in modern LLMs.
-
-```{code-cell} python
-ffn = nn.Sequential(
-    nn.Linear(8, 16),
-    nn.ReLU(),
-    nn.Linear(16, 8)
-)
-X_ffn = ffn(out.squeeze(0))
-X_ffn.shape
-```
-
-```{code-cell} output
-torch.Size([4, 8])
-```
-
-## 3.5 Residual Connections and Normalization
-
-$$
-\begin{aligned}
-Y &= \text{LayerNorm}(X + \text{MHA}(X)), \\
-Z &= \text{LayerNorm}(Y + \text{FFN}(Y)).
-\end{aligned}
-$$
-
-```{code-cell} python
-norm = nn.LayerNorm(8)
-residual_out = norm(X.squeeze(0) + out.squeeze(0))
-residual_out.shape
-```
-
-```{code-cell} output
-torch.Size([4, 8])
-```
-
-# 4 Positional Encoding
-
-## 4.1 Why We Need Position Information
-
-Without positional information, the model would see the same embedding vector for the word “dog” whether it appears first or last in a sentence.
 
 ```{admonition} Example
-:class: tip
-Consider the sentences:  
-- “The cat chased the dog.”  
-- “The dog chased the cat.”  
-Without position encodings, these two inputs would look identical to the Transformer.
+:class: note
+Suppose our tiny vocabulary is {“a”, “cat”, “sat”, “on”, “the”, “mat”}, and logits for the next token are $[0.2, 1.5, -0.3, 0.8, 2.1, 0.4]$.  
+
+Softmax turns this into probabilities:  
+$$
+[0.07, 0.25, 0.04, 0.13, 0.46, 0.09],
+$$  
+suggesting “the” is most likely.
+```
+```{code-cell} python
+import torch
+logits = torch.tensor([0.2, 1.5, -0.3, 0.8, 2.1, 0.4])
+probs = torch.softmax(logits, dim=-1)
+print(probs.round(2))
+```
+```{code-cell} output
+tensor([0.0700, 0.2500, 0.0400, 0.1300, 0.4600, 0.0900])
 ```
 
-## 4.2 The Sine–Cosine Encoding Formula
+## 1.3 Tokenization: From Text to Indices
+
+Text is split into **tokens** using algorithms like **Byte-Pair Encoding (BPE)** {cite}`sennrich2016neural` or **SentencePiece** {cite}`kudo2018sentencepiece`.  
+
+Tokens are not always words—common phrases become single tokens, rare words split into subwords (e.g., “unhappiness” → “un##”, “happ##”, “iness”).  
+This balances vocabulary size (typically 32k–100k) with expressiveness.
+
+```{admonition} Example
+:class: note
+GPT-2 uses **byte-level BPE** {cite}`radford2019language`, allowing arbitrary text without unknown tokens.  
+
+“The quick brown fox” might tokenize to [464, 2069, 7586, 41151], where each number indexes into the embedding matrix.
+```
+
+## 1.4 Embeddings: From Indices to Vectors
+
+Embeddings map discrete tokens to continuous vectors in $\mathbb{R}^d$ (e.g., $d=768$ for BERT-base).  
+
+- **Learned during training.**  
+- **Semantically similar tokens cluster together.**  
+- **Dimensionality trades off expressivity vs. computation.**
+
+```{code-cell} python
+import torch.nn as nn
+vocab_size, embed_dim = 10000, 8
+embedding_layer = nn.Embedding(vocab_size, embed_dim)
+token_ids = torch.tensor([42, 1337])
+embeddings = embedding_layer(token_ids)
+print(embeddings.shape)
+```
+```{code-cell} output
+torch.Size([2, 8])
+```
+
+# 2 The Transformer Architecture
+
+The Transformer {cite}`vaswani2017attention` is a stack of $L$ identical blocks, each with two sub-layers:  
+
+1. **Multi-Head Self-Attention** (context mixing).  
+2. **Positionwise Feedforward Network** (nonlinear transformation).  
+
+Each sub-layer is wrapped in a **residual connection** and **layer normalization** {cite}`xiong2020layer`:  
 
 $$
-\begin{aligned}
-\mathrm{PE}(pos,2i)   &= \sin\!\left(\frac{pos}{10000^{2i/d}}\right), \\
-\mathrm{PE}(pos,2i+1) &= \cos\!\left(\frac{pos}{10000^{2i/d}}\right).
-\end{aligned}
+X' = \mathrm{LayerNorm}(X + \mathrm{SubLayer}(X)).
 $$
 
-## 4.3 Adding Positional Encodings to Embeddings
+## 2.1 Self-Attention: The Core Mechanism
+
+Self-attention computes weighted averages of all tokens, with weights from pairwise similarities.  
+
+For input $X \in \mathbb{R}^{T \times d}$:  
+
+- Project to queries/keys/values: $Q = XW_Q$, $K = XW_K$, $V = XW_V$.  
+- Compute **attention scores**: $A = \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)$.  
+- Output: $Z = A V$.  
+
+The scaling by $\sqrt{d_k}$ stabilizes gradients.
+
+```{admonition} Intuition
+:class: tip
+Attention asks: “For each token, which others are relevant?” The matrix $A \in [0,1]^{T\times T}$ encodes pairwise “relevance weights,” allowing dynamic context integration.
+```
+
+## 2.2 Multi-Head Attention
+
+Run $H$ attention heads in parallel, concatenate, and project:  
 
 $$
-x_t' = x_t + \mathrm{PE}(t).
+\mathrm{MultiHead}(X) = \mathrm{Concat}(Z_1, \ldots, Z_H) W_O.
+$$
+
+Each head learns different relationships (e.g., syntax vs. semantics).  
+
+```{admonition} Discussion
+:class: important
+**Pre- vs. Post-Norm.**  
+Original Transformer uses post-norm; modern variants often pre-norm for stability.  
+**Activation.**  
+FFNs use GELU/SwiGLU {cite}`shazeer2020glu` over ReLU.  
+**Efficient Implementations.**  
+FlashAttention {cite}`dao2022flashattention,dao2023flashattention2` fuses operations for speed/memory gains; efficient variants like Performer {cite}`choromanski2021rethinking` approximate softmax.  
+**Heads Ablation.**  
+Not all heads are equally important—many can be pruned {cite}`michel2019sixteen`.
+```
+
+```{code-cell} python
+import torch.nn.functional as F
+X = torch.rand(1, 5, 8)  # (batch, tokens, dim)
+Q = K = V = X  # simplified
+attn_scores = F.softmax(Q @ K.transpose(-2,-1) / torch.sqrt(torch.tensor(8.)), dim=-1)
+print(attn_scores.shape)
+```
+```{code-cell} output
+torch.Size([1, 5, 5])
+```
+
+## 2.3 Feedforward Network
+
+A simple two-layer MLP applied independently to each token:  
+
+$$
+\mathrm{FFN}(x) = \sigma(x W_1 + b_1) W_2 + b_2.
+$$
+
+Expands to higher dimension (e.g., $4d$) for capacity, then projects back.
+
+# 3 Positional Encoding
+
+Transformers are permutation-invariant, so we add **positional encodings** to embeddings:  
+
+$$
+x_t = E[w_t] + \mathrm{PE}(t).
+$$
+
+Original sinusoidal:  
+
+$$
+\mathrm{PE}(t, 2i) = \sin\!\left(\frac{t}{10000^{2i/d}}\right), \quad
+\mathrm{PE}(t, 2i+1) = \cos\!\left(\frac{t}{10000^{2i/d}}\right).
 $$
 
 ```{code-cell} python
-import math
+import numpy as np
+def positional_encoding(pos, dim, base=10000.):
+    i = np.arange(dim//2)
+    angles = pos / (base ** (2*i/dim))
+    return np.concatenate([np.sin(angles), np.cos(angles)])
 
-def positional_encoding(max_len, d_model):
-    PE = torch.zeros(max_len, d_model)
-    for pos in range(max_len):
-        for i in range(0, d_model, 2):
-            angle = pos / (10000 ** (2 * i / d_model))
-            PE[pos, i] = math.sin(angle)
-            if i + 1 < d_model:
-                PE[pos, i + 1] = math.cos(angle)
-    return PE
-
-PE = positional_encoding(max_len=5, d_model=8)
-PE
+pos_enc = np.stack([positional_encoding(p, 8) for p in range(5)])
+print(torch.tensor(pos_enc).round(2))
 ```
-
 ```{code-cell} output
-tensor([[ 0.0000,  1.0000,  0.0000,  1.0000,  0.0000,  1.0000,  0.0000,  1.0000],
-        [ 0.8415,  0.5403,  0.0090,  1.0000,  0.0000,  1.0000,  0.0000,  1.0000],
-        [ 0.9093, -0.4161,  0.0180,  0.9998,  0.0000,  1.0000,  0.0000,  1.0000],
-        [ 0.1411, -0.9900,  0.0270,  0.9996,  0.0000,  1.0000,  0.0000,  1.0000],
-        [-0.7568, -0.6536,  0.0360,  0.9993,  0.0000,  1.0000,  0.0000,  1.0000]])
+tensor([[ 0.0000,  0.0000,  0.0000,  0.0000,  1.0000,  1.0000,  1.0000,  1.0000],
+        [ 0.8400,  0.0100,  0.0000,  0.0000,  0.5400,  1.0000,  1.0000,  1.0000],
+        [ 0.9100,  0.0200,  0.0000,  0.0000, -0.4200,  1.0000,  1.0000,  1.0000],
+        [ 0.1400,  0.0300,  0.0000,  0.0000, -0.9900,  1.0000,  1.0000,  1.0000],
+        [-0.7600,  0.0400,  0.0000,  0.0000, -0.6500,  1.0000,  1.0000,  1.0000]])
 ```
 
 ```{admonition} Discussion
 **Alternatives in practice.**  
-Many LLMs learn **absolute** position embeddings; others use **rotary** (RoPE) to encode **relative** phase information and extrapolate better to long context [18]. **ALiBi** adds head-specific slopes to attention scores for strong length generalization without extra parameters [19].  
+Many LLMs learn **absolute** position embeddings; others use **rotary** (RoPE) to encode **relative** phase information and extrapolate better to long context {cite}`su2021roformer`. **ALiBi** adds head-specific slopes to attention scores for strong length generalization without extra parameters {cite}`press2022train`.
 ```
 
 # 5 Putting It All Together
@@ -498,22 +373,27 @@ Run the interactive version in Colab:
 
 # References
 
-1. **Vaswani, A., et al.** (2017). *Attention is All You Need*. NeurIPS 2017.  
-2. **Brown, T. B., et al.** (2020). *Language Models are Few-Shot Learners*. NeurIPS (GPT-3).  
-3. **Touvron, H., et al.** (2023). *LLaMA: Open and Efficient Foundation Language Models*. arXiv:2302.13971.  
-4. **Kingma, D. P., Ba, J.** (2015). *Adam: A Method for Stochastic Optimization*. ICLR.  
-5. **Loshchilov, I., Hutter, F.** (2019). *Decoupled Weight Decay Regularization (AdamW)*. ICLR.  
-6. **Holtzman, A., et al.** (2020). *The Curious Case of Neural Text Degeneration (nucleus sampling)*. ICLR.  
-7. **Press, O., Wolf, L.** (2017). *Using the Output Embedding to Improve Language Models (Weight Tying)*. EACL.  
-8. **Guo, C., et al.** (2017). *On Calibration of Modern Neural Networks*. ICML.  
-9. **Sennrich, R., et al.** (2016). *Neural MT of Rare Words with Subword Units*. ACL (BPE).  
-10. **Kudo, T., Richardson, J.** (2018). *SentencePiece: A simple and language independent subword tokenizer*. EMNLP: System Demos.  
-11. **Radford, A., et al.** (2019). *Language Models are Unsupervised Multitask Learners*. OpenAI Technical Report (GPT-2, byte-level BPE).  
-12. **Xiong, R., et al.** (2020). *On Layer Normalization in the Transformer Architecture*. ICML.  
-13. **Shazeer, N.** (2020). *GLU Variants Improve Transformer*. arXiv:2002.05202 (SwiGLU).  
-14. **Dao, T.** (2023). *FlashAttention-2 & Practical Long-Context Training*.  
-15. **Dao, T., et al.** (2022). *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*. NeurIPS.  
-16. **Choromanski, K., et al.** (2021). *Rethinking Attention with Performers*. ICLR.  
-17. **Michel, P., Levy, O., Neubig, G.** (2019). *Are Sixteen Heads Really Better than One?* NeurIPS.  
-18. **Su, J., et al.** (2021). *RoFormer: Transformer with Rotary Position Embedding*. NeurIPS.  
-19. **Press, O., et al.** (2022). *Train Short, Test Long: Attention with Linear Biases (ALiBi)*. arXiv:2108.12409.  
+```{bibliography}
+:style: unsrt
+:filter: False
+
+vaswani2017attention
+brown2020language
+touvron2023llama
+kingma2015adam
+loshchilov2019decoupled
+holtzman2020curious
+press2017using
+guo2017calibration
+sennrich2016neural
+kudo2018sentencepiece
+radford2019language
+xiong2020layer
+shazeer2020glu
+dao2022flashattention
+dao2023flashattention2
+choromanski2021rethinking
+michel2019sixteen
+su2021roformer
+press2022train
+```
