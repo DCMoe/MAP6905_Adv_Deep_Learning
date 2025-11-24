@@ -5,13 +5,17 @@ title: Mathematical Anatomy of the Transformer
 In Module 1, we introduced the Transformer’s architecture {cite}`vaswani2017attention`.  
 Now let’s express its components formally in **matrix notation**, so we can later connect them to optimization and gradients.
 
+
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/wjZofJX0v4M?si=MTudK5YA1moQJW8q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<P></p>
+
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/eMlx5fFNoYc?si=hLoB1REfRj-1_SY9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<p></p>
+
+
 
 ---
 
