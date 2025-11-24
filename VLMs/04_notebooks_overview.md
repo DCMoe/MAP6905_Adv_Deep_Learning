@@ -1,4 +1,6 @@
-# Module 4: Hands-on Demonstrations
+---
+title: Hands-on Demonstrations
+---
 
 ## Learning Objectives
 
