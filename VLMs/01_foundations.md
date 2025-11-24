@@ -121,6 +121,10 @@ Traditional AI systems processed vision and language independently:
 
 ### The Multimodal Revolution: Joint Modeling
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lOD_EE96jhM?si=Tc3peoEL2EckTE9t" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<br>
+
 Vision-Language Models (VLMs) learn joint representations of images and text. Two dominant paradigms emerged:
 
 #### 1. Contrastive Learning (CLIP-style)
