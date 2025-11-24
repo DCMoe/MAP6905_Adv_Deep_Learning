@@ -131,6 +131,10 @@ Vision-Language Models (VLMs) learn joint representations of images and text. Tw
 
 **Core Idea**: Align image and text embeddings in a shared space using contrastive loss {cite}`radford2021learning`.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KcSXcpluDe4?si=NTzequl6IGyXz7on" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<br>
+
 **Training Objective** (InfoNCE):
 
 $$
