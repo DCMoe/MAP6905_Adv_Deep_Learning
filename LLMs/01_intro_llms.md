@@ -15,11 +15,11 @@ By the end of this module, you will be able to:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5sLYAQS9sWQ?si=AtFx17RCIfVCg_m7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<br>
+<p></p>
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LPZh9BOjkQs?si=S7eYoUVl3TvOz108" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<br>
+<p></p>
 
 # 1 What is a Large Language Model?
 
