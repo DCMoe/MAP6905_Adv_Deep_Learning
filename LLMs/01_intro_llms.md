@@ -119,7 +119,7 @@ where $z_{t,i}$ is the logit corresponding to token $v_i$, and the denominator e
 
 ```{admonition} Discussion
 **Weight tying.**  
-Many LMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity {cite}`press2017using`.  
+Many LLMs tie the output projection $W_o$ with the embedding matrix $E$ (or its transpose) to reduce parameters and improve perplexity {cite}`press2017using`.  
 
 **Temperature.**  
 Sampling temperature $\tau$ rescales logits: $\text{softmax}(z_t/\tau)$.  
